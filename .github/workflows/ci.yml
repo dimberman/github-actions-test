@@ -7,7 +7,12 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - uses: engineerd/setup-kind@v0.3.0
-    - name: Testing
+    - name: Test cluster running
       run: |
         kubectl cluster-info
         kubectl get pods -n kube-system
+    - name: download helm chart
+      run: |
+        curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+        chmod 700 get_helm.sh
+        ./get_helm.sh
