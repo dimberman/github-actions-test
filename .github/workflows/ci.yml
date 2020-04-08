@@ -27,25 +27,27 @@ jobs:
         run: docker load -i ./airflow-image/image
       - name: run image
         run: docker run dimberman/foo:bar
-
-  create-kind:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - uses: engineerd/setup-kind@v0.3.0
+      - name: Create k8s Kind Cluster
+        uses: helm/kind-action@v1.0.0-rc.1
+      - name: Test cluster running
+        run: |
+          kubectl cluster-info
+          kubectl get pods -n kube-system
     - name: Test cluster running
       run: |
         kubectl cluster-info
         kubectl get pods -n kube-system
-    - name: download helm
-      run: |
-        curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
-        chmod 700 get_helm.sh
-        ./get_helm.sh
-    - name: create namespace
-      run: kubectl create namespace airflow
-    - name: pull astronomer helm chart
-      run: |
-        helm repo add astronomer https://helm.astronomer.io
-        helm install airflow --namespace airflow astronomer/airflow
-        kubectl get pods --namespace airflow
+    - name: load kind image
+      run: kind load docker-image dimberman/foo:bar
+#    - name: download helm
+#      run: |
+#        curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+#        chmod 700 get_helm.sh
+#        ./get_helm.sh
+#    - name: create namespace
+#      run: kubectl create namespace airflow
+#    - name: pull astronomer helm chart
+#      run: |
+#        helm repo add astronomer https://helm.astronomer.io
+#        helm install airflow --namespace airflow astronomer/airflow
+#        kubectl get pods --namespace airflow
