@@ -2,7 +2,23 @@ name: "Create cluster using KinD"
 on: [pull_request, push]
 
 jobs:
-  kind:
+  create-docker-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: build image
+        run: docker build -t dimberman/foo:bar .
+      - name: save image
+        run: docker save -o ./image dimberman/foo:bar
+  pull-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: load image
+        run: docker load -i ./image
+      - name: run image
+        run: docker run dimberman/foo:bar
+
+  create-kind:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -22,3 +38,4 @@ jobs:
       run: |
         helm repo add astronomer https://helm.astronomer.io
         helm install airflow --namespace airflow astronomer/airflow
+        kubectl get pods --namespace airflow
