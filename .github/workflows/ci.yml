@@ -24,7 +24,7 @@ jobs:
         with:
           name: airflow-image
       - name: load image
-        run: docker load -i ./image
+        run: docker load -i ./image/airflow-image
       - name: run image
         run: docker run dimberman/foo:bar
 
