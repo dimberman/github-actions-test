@@ -10,9 +10,19 @@ jobs:
         run: docker build -t dimberman/foo:bar .
       - name: save image
         run: docker save -o ./image dimberman/foo:bar
+      - name: Upload image
+        uses: actions/upload-artifact@v1
+        with:
+          name: airflow-image
+          path: image
   pull-image:
+    needs: create-docker-image
     runs-on: ubuntu-latest
     steps:
+      - name: Download image
+        uses: actions/download-artifact@v1
+        with:
+          name: airflow-image
       - name: load image
         run: docker load -i ./image
       - name: run image
