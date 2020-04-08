@@ -34,7 +34,7 @@ jobs:
           kubectl cluster-info
           kubectl get pods -n kube-system
       - name: load kind image
-        run: kind load docker-image dimberman/foo:bar
+        run: kind load docker-image --name kind-chart-testing dimberman/foo:bar
 #    - name: download helm
 #      run: |
 #        curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
