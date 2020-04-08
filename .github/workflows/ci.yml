@@ -30,6 +30,10 @@ jobs:
     needs: [create-docker-image, create-kind-cluster]
     runs-on: ubuntu-latest
     steps:
+      - name: Test cluster running
+        run: |
+          kubectl cluster-info
+          kubectl get pods -n kube-system
       - name: Download image
         uses: actions/download-artifact@v1
         with:
