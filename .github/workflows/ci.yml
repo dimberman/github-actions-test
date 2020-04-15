@@ -18,18 +18,14 @@ jobs:
   create-kind-cluster:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@master
+        with:
+          repo: github.com/astronomer/airflow-chart
+          ref: airflow-2.0-compliance
       - name: Create k8s Kind Cluster
         uses: helm/kind-action@v1.0.0-rc.1
         with:
           cluster_name: kind
-      - name: Test cluster running
-        run: |
-          kubectl cluster-info
-          kubectl get pods -n kube-system
-  pull-image:
-    needs: [create-docker-image, create-kind-cluster]
-    runs-on: ubuntu-latest
-    steps:
       - name: Test cluster running
         run: |
           kubectl cluster-info
@@ -42,8 +38,8 @@ jobs:
         run: docker load -i ./airflow-image/image
       - name: run image
         run: docker run dimberman/foo:bar
-      - name: load kind image
-        run: kind load docker-image dimberman/foo:bar
+
+
 #    - name: download helm
 #      run: |
 #        curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
