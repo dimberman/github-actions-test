@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
         with:
-          repo: github.com/astronomer/airflow-chart
+          repo: https://github.com/astronomer/airflow-chart
           ref: airflow-2.0-compliance
       - name: Create k8s Kind Cluster
         uses: helm/kind-action@v1.0.0-rc.1
